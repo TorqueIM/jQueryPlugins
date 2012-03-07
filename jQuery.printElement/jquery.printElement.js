@@ -7,6 +7,8 @@
 * Inspired by PrintArea (http://plugins.jquery.com/project/PrintArea) and
 * http://stackoverflow.com/questions/472951/how-do-i-print-an-iframe-from-javascript-in-safari-chrome
 *
+*  Fork : https://github.com/cfabianski/jQueryPlugins 
+*  Compatibility for jQuery > 1.5.x
 *  Home Page : http://projects.erikzaadi/jQueryPlugins/jQuery.printElement 
 *  Issues (bug reporting) : http://github.com/erikzaadi/jQueryPlugins/issues/labels/printElement
 *  jQuery plugin page : http://plugins.jquery.com/project/printElement 
@@ -166,7 +168,7 @@
             $("link", document).filter(function () {
                 return $(this).attr("rel").toLowerCase() == "stylesheet";
             }).each(function () {
-                html.push('<link type="text/css" rel="stylesheet" href="' + $(this).attr("href") + '" media="' + $(this).attr('media') + '" >');
+                html.push('<link type="text/css" rel="stylesheet" href="' + $(this).attr("href") + '" media="' + ($(this).attr('media') || '') + '" >');
             });
         }
         //Ensure that relative links work
