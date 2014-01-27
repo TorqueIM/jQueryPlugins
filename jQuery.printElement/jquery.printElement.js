@@ -1,8 +1,11 @@
 /// <reference path="http://code.jquery.com/jquery-1.4.1-vsdoc.js" />
 /*
-* Print Element Plugin 1.2
+* Print Element Plugin 1.2.1
 *
-* Copyright (c) 2010 Erik Zaadi
+* Copyright (c) 2010 Erik Zaadi, 2014 Igor Bedek
+*
+* Changelog 1.2 to 1.2.1:
+* $.browser replaced with $.uaMatch() since $.browser is deprecated and removed from jQuery 1.9
 *
 * Inspired by PrintArea (http://plugins.jquery.com/project/PrintArea) and
 * http://stackoverflow.com/questions/472951/how-do-i-print-an-iframe-from-javascript-in-safari-chrome
@@ -23,12 +26,13 @@
 ; (function (window, undefined) {
     var document = window["document"];
     var $ = window["jQuery"];
+    var $browser = jQuery.uaMatch(navigator.userAgent).browser.toLowerCase();
     $.fn["printElement"] = function (options) {
         var mainOptions = $.extend({}, $.fn["printElement"]["defaults"], options);
         //iframe mode is not supported for opera and chrome 3.0 (it prints the entire page).
         //http://www.google.com/support/forum/p/Webmasters/thread?tid=2cb0f08dce8821c3&hl=en
         if (mainOptions["printMode"] == 'iframe') {
-            if ($.browser.opera || (/chrome/.test(navigator.userAgent.toLowerCase())))
+            if ($browser == 'opera' || (/chrome/.test(navigator.userAgent.toLowerCase())))
                 mainOptions["printMode"] = 'popup';
         }
         //Remove previously printed iframe if exists
@@ -130,7 +134,7 @@
             //Thanks http://blog.ekini.net/2009/02/24/jquery-getting-the-latest-textvalue-inside-a-textarea/
             var value = $(this).attr('value');
             //fix for issue 7 (http://plugins.jquery.com/node/13503 and http://github.com/erikzaadi/jQueryPlugins/issues#issue/7)
-            if ($.browser.mozilla && this.firstChild)
+            if ($browser == 'mozilla' && this.firstChild)
                 this.firstChild.textContent = value;
             else
                 this.innerHTML = value;
@@ -173,7 +177,7 @@
         html.push('<base href="' + _getBaseHref() + '" />');
         html.push('</head><body style="' + opts["printBodyOptions"]["styleToAdd"] + '" class="' + opts["printBodyOptions"]["classNameToAdd"] + '">');
         html.push('<div class="' + $element.attr('class') + '">' + elementHtml + '</div>');
-        html.push('<script type="text/javascript">function printPage(){focus();print();' + ((!$.browser.opera && !opts["leaveOpen"] && opts["printMode"].toLowerCase() == 'popup') ? 'close();' : '') + '}</script>');
+        html.push('<script type="text/javascript">function printPage(){focus();print();' + ((/*$browser != 'opera' && */!opts["leaveOpen"] && opts["printMode"].toLowerCase() == 'popup') ? 'close();' : '') + '}</script>');
         html.push('</body></html>');
 
         return html.join('');
